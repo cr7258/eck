@@ -21,8 +21,8 @@ spec:
           resources:
             #限制资源使用
             limits:
-              memory: 2Gi
-              cpu: 2
+              memory: 1Gi
+              cpu: 1
     volumeClaimTemplates:
     - metadata:
         name: elasticsearch-data
@@ -45,7 +45,7 @@ spec:
         - name: elasticsearch
           resources:
             limits:
-              memory: 4Gi
+              memory: 2Gi
               cpu: 2
     volumeClaimTemplates:
     - metadata:
@@ -56,7 +56,7 @@ spec:
         resources:
           requests:
             storage: 20Gi
-        storageClassName: alicloud-disk-ssd #挂载SSD
+        storageClassName: alicloud-disk-essd #挂载SSD
   # warm节点
   - name: warm
     count: 3
@@ -70,7 +70,31 @@ spec:
           resources:
             limits:
               memory: 2Gi
-              cpu: 2
+              cpu: 1
+    volumeClaimTemplates:
+    - metadata:
+        name: elasticsearch-data
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 20Gi
+        storageClassName: alicloud-disk-ssd
+  # cold节点
+  - name: cold
+    count: 3
+    config:
+      node.attr.data: cold
+      node.roles: ["data","ingest"]
+    podTemplate:
+      spec:
+        containers:
+        - name: elasticsearch
+          resources:
+            limits:
+              memory: 2Gi
+              cpu: 1
     volumeClaimTemplates:
     - metadata:
         name: elasticsearch-data
