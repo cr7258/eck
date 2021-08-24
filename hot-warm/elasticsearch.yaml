@@ -3,6 +3,7 @@ kind: Elasticsearch
 metadata:
   name: hot-warm-elasticsearch
 spec:
+  #禁用https
   http:
     tls:
       selfSignedCertificate:

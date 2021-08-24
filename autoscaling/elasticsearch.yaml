@@ -1,0 +1,36 @@
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+metadata:
+  name: autoscaling-elasticsearch
+  annotations:
+    elasticsearch.alpha.elastic.co/autoscaling-spec: |
+      {
+          "pollingPeriod": "10s",
+          "policies": [{
+              "name": "di",
+              "roles": ["data", "ingest" , "transform"],
+              "deciders": {
+                "proactive_storage": {
+                    "forecast_window": "5m"
+                }
+              },
+              "resources": {
+                  "nodeCount": { "min": 3, "max": 8 },
+                  "cpu": { "min": 2, "max": 2 },
+                  "memory": { "min": "2Gi", "max": "2Gi" },
+                  "storage": { "min": "100Mi", "max": "100Mi" }
+              }
+          }]
+      }
+spec:
+  version: 7.14.0
+  nodeSets:
+    - name: master
+      count: 1
+      config:
+        node:
+          roles: [ "master" ]
+    - name: di
+      config:
+        node:
+          roles: [ "data", "ingest", "transform" ]
