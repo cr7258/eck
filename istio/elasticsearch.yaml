@@ -1,0 +1,131 @@
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+metadata:
+  name: istio-elasticsearch
+  namespace: istio-demo
+spec:
+  #禁用https
+  http:
+    tls:
+      selfSignedCertificate:
+        disabled: true
+  version: 7.14.0
+  nodeSets:
+  #master节点
+  - name: master
+    count: 3
+    config:
+      node.roles: ["master"]
+    podTemplate:
+      metadata:
+        annotations:
+          traffic.sidecar.istio.io/includeInboundPorts: "*"
+          traffic.sidecar.istio.io/excludeOutboundPorts: "9300"
+          traffic.sidecar.istio.io/excludeInboundPorts: "9300"
+      spec:
+        automountServiceAccountToken: true 
+        containers:
+        - name: elasticsearch
+          resources:
+            #限制资源使用
+            limits:
+              memory: 1Gi
+              cpu: 1
+    volumeClaimTemplates:
+    - metadata:
+        name: elasticsearch-data
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 20Gi
+            #storageClassName: alicloud-disk-efficiency #挂载高效云盘
+  #data节点
+  - name: data
+    count: 3
+    config:
+      node.roles: ["data"]
+    podTemplate:
+      metadata:
+        annotations:
+          traffic.sidecar.istio.io/includeInboundPorts: "*"
+          traffic.sidecar.istio.io/excludeOutboundPorts: "9300"
+          traffic.sidecar.istio.io/excludeInboundPorts: "9300"
+      spec:
+        automountServiceAccountToken: true 
+        containers:
+        - name: elasticsearch
+          resources:
+            limits:
+              memory: 2Gi
+              cpu: 2
+    volumeClaimTemplates:
+    - metadata:
+        name: elasticsearch-data
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 20Gi
+            #storageClassName: alicloud-disk-essd #挂载SSD
+  #ingest节点
+  - name: ingest
+    count: 3
+    config:
+      node.roles: ["ingest"]
+    podTemplate:
+      metadata:
+        annotations:
+          traffic.sidecar.istio.io/includeInboundPorts: "*"
+          traffic.sidecar.istio.io/excludeOutboundPorts: "9300"
+          traffic.sidecar.istio.io/excludeInboundPorts: "9300"
+      spec:
+        automountServiceAccountToken: true 
+        containers:
+        - name: elasticsearch
+          resources:
+            limits:
+              memory: 2Gi
+              cpu: 1
+    volumeClaimTemplates:
+    - metadata:
+        name: elasticsearch-data
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 20Gi
+            #storageClassName: alicloud-disk-ssd
+  #coordinating节点
+  - name: coordinating
+    count: 3
+    config:
+      node.roles: []
+    podTemplate:
+      metadata:
+        annotations:
+          traffic.sidecar.istio.io/includeInboundPorts: "*"
+          traffic.sidecar.istio.io/excludeOutboundPorts: "9300"
+          traffic.sidecar.istio.io/excludeInboundPorts: "9300"
+      spec:
+        automountServiceAccountToken: true 
+        containers:
+        - name: elasticsearch
+          resources:
+            limits:
+              memory: 2Gi
+              cpu: 1
+    volumeClaimTemplates:
+    - metadata:
+        name: elasticsearch-data
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 20Gi
+            #storageClassName: alicloud-disk-efficiency
+
