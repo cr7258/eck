@@ -40,7 +40,7 @@ spec:
         resources:
           requests:
             storage: 20Gi
-            #storageClassName: alicloud-disk-efficiency #挂载高效云盘
+        storageClassName: alicloud-disk-efficiency
   #data节点
   - name: data
     count: 3
@@ -69,7 +69,7 @@ spec:
         resources:
           requests:
             storage: 20Gi
-            #storageClassName: alicloud-disk-essd #挂载SSD
+        storageClassName: alicloud-disk-efficiency 
   #ingest节点
   - name: ingest
     count: 3
@@ -98,7 +98,7 @@ spec:
         resources:
           requests:
             storage: 20Gi
-            #storageClassName: alicloud-disk-ssd
+        storageClassName: alicloud-disk-efficiency
   #coordinating节点
   - name: coordinating
     count: 3
@@ -127,5 +127,5 @@ spec:
         resources:
           requests:
             storage: 20Gi
-            #storageClassName: alicloud-disk-efficiency
+        storageClassName: alicloud-disk-efficiency
 
