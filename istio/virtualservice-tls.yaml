@@ -1,0 +1,22 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: istio-elasticsearch-gateway-virtualservice-tls
+  namespace: istio-demo
+spec:
+  hosts:
+  - "istio.elasticsearch.com" #客户端访问的域名
+  gateways: 
+  - istio-elasticsearch-gateway-tls  #gateway的名称
+  http:
+  - match:  #写入操作的请求分发至ingest节点
+    - uri:
+        regex: .*_doc.* #正则表达式匹配url,例如创建文档my-index-istio/doc/1
+    - uri:
+        prefix: /_bulk #匹配url前缀，bulk批量提交
+    route:
+      - destination:
+          host: istio-elasticsearch-es-ingest #kubernetes集群中真正存在的service
+  - route:         
+    - destination:  #其余操作的请求分发至coordinating节点
+        host: istio-elasticsearch-es-coordinating

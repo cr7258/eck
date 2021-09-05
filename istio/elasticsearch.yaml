@@ -4,7 +4,7 @@ metadata:
   name: istio-elasticsearch
   namespace: istio-demo
 spec:
-  #禁用https
+  #禁用elaticsearch本身的https,通过istio管理tls
   http:
     tls:
       selfSignedCertificate:
@@ -19,11 +19,13 @@ spec:
     podTemplate:
       metadata:
         annotations:
+          #将传输端口9300排除在代理之外
           traffic.sidecar.istio.io/includeInboundPorts: "*"
           traffic.sidecar.istio.io/excludeOutboundPorts: "9300"
           traffic.sidecar.istio.io/excludeInboundPorts: "9300"
       spec:
-        automountServiceAccountToken: true 
+        #仅当 Kubernetes 集群不支持发布第三方安全令牌时才需要设置
+        #automountServiceAccountToken: true
         containers:
         - name: elasticsearch
           resources:
@@ -53,7 +55,6 @@ spec:
           traffic.sidecar.istio.io/excludeOutboundPorts: "9300"
           traffic.sidecar.istio.io/excludeInboundPorts: "9300"
       spec:
-        automountServiceAccountToken: true 
         containers:
         - name: elasticsearch
           resources:
@@ -82,7 +83,6 @@ spec:
           traffic.sidecar.istio.io/excludeOutboundPorts: "9300"
           traffic.sidecar.istio.io/excludeInboundPorts: "9300"
       spec:
-        automountServiceAccountToken: true 
         containers:
         - name: elasticsearch
           resources:
@@ -111,7 +111,6 @@ spec:
           traffic.sidecar.istio.io/excludeOutboundPorts: "9300"
           traffic.sidecar.istio.io/excludeInboundPorts: "9300"
       spec:
-        automountServiceAccountToken: true 
         containers:
         - name: elasticsearch
           resources:

@@ -1,0 +1,19 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: istio-elasticsearch-gateway-tls
+  namespace: istio-demo
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 9200
+      name: https  
+      protocol: HTTPS #改为HTTPS协议
+    hosts:
+       - "istio.elasticsearch.com" #客户端访问的域名
+    tls: #TLS加密
+      mode: SIMPLE
+      credentialName: istio-elasticsearch-credential
+

@@ -18,7 +18,7 @@ metadata:
                   "nodeCount": { "min": 3, "max": 8 },
                   "cpu": { "min": 2, "max": 2 },
                   "memory": { "min": "2Gi", "max": "2Gi" },
-                  "storage": { "min": "100Mi", "max": "100Mi" }
+                  "storage": { "min": "20Gi", "max": "20Gi" }
               }
           }]
       }
@@ -26,11 +26,31 @@ spec:
   version: 7.14.0
   nodeSets:
     - name: master
-      count: 1
+      count: 3
       config:
         node:
           roles: [ "master" ]
+      volumeClaimTemplates:
+      - metadata:
+          name: elasticsearch-data
+        spec:
+          accessModes:
+          - ReadWriteOnce
+          resources:
+            requests:
+              storage: 20Gi
+          storageClassName: alicloud-disk-efficiency
     - name: di
       config:
         node:
           roles: [ "data", "ingest", "transform" ]
+      volumeClaimTemplates:
+      - metadata:
+          name: elasticsearch-data
+        spec:
+          accessModes:
+          - ReadWriteOnce
+          resources:
+            requests:
+              storage: 20Gi
+          storageClassName: alicloud-disk-efficiency
