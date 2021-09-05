@@ -4,7 +4,7 @@ metadata:
   name: istio-elasticsearch
   namespace: istio-demo
 spec:
-  #禁用elaticsearch本身的https,通过istio管理tls
+  #禁用elaticsearch 本身的 https,通过 istio 管理 tls
   http:
     tls:
       selfSignedCertificate:
@@ -43,7 +43,7 @@ spec:
           requests:
             storage: 20Gi
         storageClassName: alicloud-disk-efficiency
-  #data节点
+  #data 节点
   - name: data
     count: 3
     config:
@@ -71,7 +71,7 @@ spec:
           requests:
             storage: 20Gi
         storageClassName: alicloud-disk-efficiency 
-  #ingest节点
+  #ingest 节点
   - name: ingest
     count: 3
     config:
@@ -99,7 +99,7 @@ spec:
           requests:
             storage: 20Gi
         storageClassName: alicloud-disk-efficiency
-  #coordinating节点
+  #coordinating 节点
   - name: coordinating
     count: 3
     config:

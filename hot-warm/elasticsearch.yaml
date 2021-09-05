@@ -3,7 +3,7 @@ kind: Elasticsearch
 metadata:
   name: hot-warm-elasticsearch
 spec:
-  #禁用https
+  #禁用 https
   http:
     tls:
       selfSignedCertificate:
@@ -34,11 +34,11 @@ spec:
           requests:
             storage: 20Gi
         storageClassName: alicloud-disk-efficiency #挂载高效云盘
-  # hot节点
+  # hot 节点
   - name: hot
     count: 3
     config:
-      node.attr.data: hot
+      node.attr.data: hot #节点属性
       node.roles: ["data","ingest"]
     podTemplate:
       spec:
@@ -57,12 +57,12 @@ spec:
         resources:
           requests:
             storage: 20Gi
-        storageClassName: alicloud-disk-essd #挂载SSD
-  # warm节点
+        storageClassName: alicloud-disk-essd #挂载 ESSD
+  # warm 节点
   - name: warm
     count: 3
     config:
-      node.attr.data: warm
+      node.attr.data: warm #节点属性
       node.roles: ["data","ingest"]
     podTemplate:
       spec:
@@ -80,13 +80,13 @@ spec:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 20Gi
-        storageClassName: alicloud-disk-ssd
-  # cold节点
+            storage: 60Gi
+        storageClassName: alicloud-disk-ssd  #挂载 SSD
+  # cold 节点
   - name: cold
     count: 3
     config:
-      node.attr.data: cold
+      node.attr.data: cold #节点属性
       node.roles: ["data","ingest"]
     podTemplate:
       spec:
@@ -104,6 +104,6 @@ spec:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 20Gi
-        storageClassName: alicloud-disk-efficiency
+            storage: 100Gi
+        storageClassName: alicloud-disk-efficiency  #挂载高效云盘
 
