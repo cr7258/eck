@@ -4,7 +4,7 @@ metadata:
   name: istio-elasticsearch
   namespace: istio-demo
 spec:
-  #禁用elaticsearch 本身的 https,通过 istio 管理 tls
+  #禁用 elaticsearch 本身的 https,通过 istio 管理 tls
   http:
     tls:
       selfSignedCertificate:
@@ -19,7 +19,7 @@ spec:
     podTemplate:
       metadata:
         annotations:
-          #将传输端口9300排除在代理之外
+          #将传输端口 9300 排除在代理之外
           traffic.sidecar.istio.io/includeInboundPorts: "*"
           traffic.sidecar.istio.io/excludeOutboundPorts: "9300"
           traffic.sidecar.istio.io/excludeInboundPorts: "9300"
