@@ -10,10 +10,10 @@ spec:
   - port:
       number: 9200
       name: https  
-      protocol: HTTPS #改为HTTPS协议
+      protocol: HTTPS #改为 HTTPS 协议
     hosts:
        - "istio.elasticsearch.com" #客户端访问的域名
-    tls: #TLS加密
+    tls: #TLS 加密
       mode: SIMPLE
       credentialName: istio-elasticsearch-credential
 
