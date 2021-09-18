@@ -1,4 +1,4 @@
-# Elastic Stack 实战手册 - 3.4.1.8 ECK 安装实验
+# Elastic Stack 实战手册 - 3.4.1.8 ECK 实验
 
 
 
